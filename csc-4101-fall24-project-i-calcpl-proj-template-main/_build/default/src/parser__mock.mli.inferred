@@ -1,0 +1,34 @@
+type token =
+    TRUE
+  | TIMES_FLOAT
+  | TIMES
+  | THEN
+  | RPAREN
+  | PLUS_FLOAT
+  | PLUS
+  | MINUS_FLOAT
+  | MINUS
+  | LPAREN
+  | LET
+  | LEQ
+  | INT_TYPE
+  | INT of int
+  | IN
+  | IF
+  | ID of string
+  | GEQ
+  | FLOAT_TYPE
+  | FLOAT of float
+  | FALSE
+  | EQUALS
+  | EOF
+  | ELSE
+  | DIVIDE_FLOAT
+  | DIVIDE
+  | COLON
+  | BOOL_TYPE
+val menhir_begin_marker : int
+val xv_typ : Ast.typ
+val xv_prog : Ast.expr
+val xv_expr : Ast.expr
+val menhir_end_marker : int
