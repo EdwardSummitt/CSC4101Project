@@ -33,10 +33,11 @@ open Ast
 
 %nonassoc IN
 %nonassoc ELSE
-%left LEQ
-%left GEQ
-%left PLUS MINUS PLUS_FLOAT MINUS_FLOAT
-%left TIMES DIVIDE TIMES_FLOAT DIVIDE_FLOAT
+%left LEQ GEQ
+%left PLUS MINUS
+%left PLUS_FLOAT MINUS_FLOAT
+%left TIMES DIVIDE
+%left TIMES_FLOAT DIVIDE_FLOAT
 
 
 %start <Ast.expr> prog
