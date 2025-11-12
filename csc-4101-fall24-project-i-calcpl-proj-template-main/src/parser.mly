@@ -8,9 +8,7 @@ open Ast
 %token TRUE
 %token FALSE
 %token GEQ
-%token GEQ_FLOAT
 %token LEQ
-%token LEQ_FLOAT
 %token TIMES_FLOAT
 %token TIMES
 %token DIVIDE_FLOAT
@@ -35,7 +33,8 @@ open Ast
 
 %nonassoc IN
 %nonassoc ELSE
-%left LEQ GEQ LEQ_FLOAT GEQ_FLOAT
+%left LEQ
+%left GEQ
 %left PLUS MINUS PLUS_FLOAT MINUS_FLOAT
 %left TIMES DIVIDE TIMES_FLOAT DIVIDE_FLOAT
 
@@ -55,9 +54,7 @@ expr:
   	| TRUE { Bool true }
   	| FALSE { Bool false }
 	| e1 = expr; GEQ; e2 = expr { Binop (Geq, e1, e2) }
-	| e1 = expr; GEQ_FLOAT; e2 = expr { Binop (Geq_Float, e1, e2) }
   	| e1 = expr; LEQ; e2 = expr { Binop (Leq, e1, e2) }
-	| e1 = expr; LEQ_FLOAT; e2 = expr { Binop (Leq_Float, e1, e2) }
 	| e1 = expr; TIMES_FLOAT; e2 = expr { Binop (Mult_Float, e1, e2)}
   	| e1 = expr; TIMES; e2 = expr { Binop (Mult, e1, e2) }
 	| e1 = expr; DIVIDE_FLOAT; e2 = expr { Binop (Div_Float, e1, e2)}
