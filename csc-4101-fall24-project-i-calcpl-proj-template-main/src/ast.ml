@@ -4,9 +4,7 @@ type bop =
   | Mult
   | Mult_Float
   | Geq
-  | Geq_Float
   | Leq
-  | Leq_Float
   | Sub
   | Sub_Float
   | Div
