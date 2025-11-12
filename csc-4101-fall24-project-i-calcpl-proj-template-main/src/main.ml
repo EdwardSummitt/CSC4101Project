@@ -64,13 +64,13 @@ let round_dfrac d x =
 (* [typeof env e] is the type of [e] in context [env]. 
     Raises: [Failure] if [e] is not well typed in [env]. *)
 let rec typeof env = function
+  | Float _ -> TFloat
   | Int _ -> TInt
   | Bool _ -> TBool
   | Var x -> lookup env x
   | Let (x, t ,e1, e2) -> typeof_let env x t e1 e2
   | Binop (bop, e1, e2) -> typeof_bop env bop e1 e2
   | If (e1, e2, e3) -> typeof_if env e1 e2 e3
-  | _ -> failwith "TODO"
   
 (* Helper function for [typeof]. *)
 and typeof_let env x t e1 e2 = 
@@ -87,6 +87,13 @@ and typeof_bop env bop e1 e2 =
   match bop, t1, t2 with
   | Add, TInt, TInt 
   | Mult, TInt, TInt -> TInt
+  | Add_Float, TFloat, TFloat 
+  | Mult_Float, TFloat, TFloat -> TFloat
+  | Sub, TInt, TInt 
+  | Div, TInt, TInt -> TInt
+  | Sub_Float, TFloat, TFloat 
+  | Div_Float, TFloat, TFloat -> TFloat
+  | Geq, TInt, TInt -> TBool
   | Leq, TInt, TInt -> TBool
   | _ -> failwith bop_err
   
@@ -113,6 +120,7 @@ let typecheck e =
 let rec subst e v x = match e with
   | Var y -> if x = y then v else e
   | Bool _ -> e
+  | Float _ -> e
   | Int _ -> e
   | Binop (bop, e1, e2) -> Binop (bop, subst e1 v x, subst e2 v x)
   | Let (y, t, e1, e2) ->
@@ -122,16 +130,14 @@ let rec subst e v x = match e with
     else Let (y, t, e1', subst e2 v x)
   | If (e1, e2, e3) -> 
     If (subst e1 v x, subst e2 v x, subst e3 v x)
-  | _ -> failwith "TODO"
   
 (* [eval e] the [v]such that [e ==> v]. *)
 let rec eval (e : expr) : expr = match e with
-  | Int _ | Bool _ -> e
+  | Float _ | Int _ | Bool _ -> e
   | Var _ -> failwith unbound_var_err
   | Binop (bop, e1, e2) -> eval_bop bop e1 e2
   | Let (x, _, e1, e2) -> subst e2 (eval e1) x|> eval
   | If (e1, e2, e3) -> eval_if e1 e2 e3
-  | _ -> failwith "TODO"
 
 (* [eval_let x e1 e2] is the [v] such that [let x = e1 in e2 ==> v]. *) 
 and eval_let x e1 e2 = 
@@ -142,8 +148,15 @@ and eval_let x e1 e2 =
 (* [eval_bop bop e1 e2] is the [v] such that [e1 bop e2 ==> v]. *) 
 and eval_bop bop e1 e2 = 
   match bop, eval e1, eval e2 with
+  | Add_Float, Float a, Float b -> Float (a +. b)
+  | Sub_Float, Float a, Float b -> Float (a -. b)
+  | Mult_Float, Float a, Float b -> Float (a *. b)
+  | Div_Float, Float a, Float b -> Float (a /. b)
   | Add, Int a, Int b -> Int (a + b)
+  | Sub, Int a, Int b -> Int (a - b)
   | Mult, Int a, Int b -> Int (a * b)
+  | Div, Int a, Int b -> Int (a / b)
+  | Geq , Int a, Int b -> Bool (a >= b)
   | Leq , Int a, Int b -> Bool (a <= b)
   | _ -> failwith bop_err
 
