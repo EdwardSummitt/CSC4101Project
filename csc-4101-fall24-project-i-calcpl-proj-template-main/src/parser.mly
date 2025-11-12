@@ -49,28 +49,19 @@ prog:
 	;
 	
 expr:
-  (* Comparisons *)
   | e1 = expr; GEQ; e2 = expr %prec GEQ { Binop (Geq, e1, e2) }
   | e1 = expr; LEQ; e2 = expr %prec LEQ { Binop (Leq, e1, e2) }
-
-  (* Float arithmetic *)
   | e1 = expr; TIMES_FLOAT; e2 = expr %prec TIMES_FLOAT { Binop (Mult_Float, e1, e2) }
   | e1 = expr; DIVIDE_FLOAT; e2 = expr %prec DIVIDE_FLOAT { Binop (Div_Float, e1, e2) }
   | e1 = expr; PLUS_FLOAT; e2 = expr %prec PLUS_FLOAT { Binop (Add_Float, e1, e2) }
   | e1 = expr; MINUS_FLOAT; e2 = expr %prec MINUS_FLOAT { Binop (Sub_Float, e1, e2) }
-
-  (* Int arithmetic *)
   | e1 = expr; TIMES; e2 = expr %prec TIMES { Binop (Mult, e1, e2) }
   | e1 = expr; DIVIDE; e2 = expr %prec DIVIDE { Binop (Div, e1, e2) }
   | e1 = expr; PLUS; e2 = expr %prec PLUS { Binop (Add, e1, e2) }
   | e1 = expr; MINUS; e2 = expr %prec MINUS { Binop (Sub, e1, e2) }
-
-  (* Let / If *)
   | LET; x = ID; COLON; t = typ; EQUALS; e1 = expr; IN; e2 = expr 
       { Let (x, t, e1, e2) }
   | IF; e1 = expr; THEN; e2 = expr; ELSE; e3 = expr { If (e1, e2, e3) }
-
-  (* Atomic expressions at the very end *)
   | LPAREN; e = expr; RPAREN { e }
   | FLOAT { Float $1 }
   | INT { Int $1 }
