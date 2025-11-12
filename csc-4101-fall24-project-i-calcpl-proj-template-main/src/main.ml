@@ -150,10 +150,10 @@ and eval_let x e1 e2 =
 (* [eval_bop bop e1 e2] is the [v] such that [e1 bop e2 ==> v]. *) 
 and eval_bop bop e1 e2 = 
   match bop, eval e1, eval e2 with
-  | Add_Float, Float a, Float b -> Float (a +. b)
-  | Sub_Float, Float a, Float b -> Float (a -. b)
-  | Mult_Float, Float a, Float b -> Float (a *. b)
-  | Div_Float, Float a, Float b -> Float (a /. b)
+  | Add_Float, Float a, Float b -> Float (round_dfrac 2 (a +. b))
+  | Sub_Float, Float a, Float b -> Float (round_dfrac 2 (a -. b))
+  | Mult_Float, Float a, Float b -> Float (round_dfrac 2 (a *. b))
+  | Div_Float, Float a, Float b -> Float (round_dfrac 2 (a /. b))
   | Add, Int a, Int b -> Int (a + b)
   | Sub, Int a, Int b -> Int (a - b)
   | Mult, Int a, Int b -> Int (a * b)
