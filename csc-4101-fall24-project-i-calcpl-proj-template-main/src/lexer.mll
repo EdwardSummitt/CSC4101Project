@@ -16,14 +16,14 @@ rule read =
   | "false" { FALSE }
   | ">=" { GEQ }
   | "<=" { LEQ }
-  | "*" { TIMES }
   | "*." { TIMES_FLOAT }
-  | "/" { DIVIDE }
   | "/." { DIVIDE_FLOAT }
-  | "+" { PLUS }
   | "+." { PLUS_FLOAT }
-  | "-" { MINUS }
   | "-." { MINUS_FLOAT }
+  | "*" { TIMES }
+  | "/" { DIVIDE }
+  | "+" { PLUS }
+  | "-" { MINUS }
   | "(" { LPAREN }
   | ")" { RPAREN }
   | "let" { LET }
